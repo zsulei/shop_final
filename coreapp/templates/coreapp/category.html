@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        {% for product in products %}
+            <hr>
+            <img src="{{ product.image.url }}" width="200" height="330" align="right" vspace="0" hspace="500">
+            <h3>Name: <a href="{% url 'product' product.id %}" >{{ product.title }}</a></h3>
+            <h3>Type: {{ product.product_type }}</h3>
+            <h3>Color: {{ product.color }}</h3>
+            <h3>Material: {{ product.material }}</h3>
+            <h3>Size: {% for size in product.size.all %}
+                {{ size }}
+                {% endfor %}
+            </h3>
+            <h3>Price: {{ product.price }}</h3>
+            <h3>Manufacturer: {{ product.manufacturer }}</h3>
+            <a class="btn btn-primary" href="{% url 'cart_add' product.id %}" role="button">Add To Cart</a>
+            <br>
+            <hr>
+        {% endfor %}
+    {% else %}
+    <h1> You should login first</h1>
+    <a href="{% url 'login' %}">Log In</a>
+    <a href="{% url 'registration' %}">Registration</a>
+    {% endif %}
+{% endblock %}

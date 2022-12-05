@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <title>Cabinet</title>
+
+{% if user.is_authenticated %}
+
+
+        <div style="text-align:right">
+        <a class="btn-primary" href="{% url 'upload_avatar' %}" role="button">Update Avatar</a>
+        <img src="{{ user.avatar.url }}" id="avatar" align="right" height="370" width="220" hspace="500">
+        </div>
+        <br>
+        <h3>Email: {{ user.username }}</h3>
+        <br><hr>
+        JOINED DATE: {{ user.date_joined }}
+        <br><hr>
+        <p id="name">{{ user.first_name }}</p>
+        <button id="update_name_button" onclick="updateName()">Update First Name</button>
+        <form id="update_name_form" hidden="hidden" method="POST" action="{% url 'update_first_name' %}">
+            {% csrf_token %}
+            <input type="text" name="first_name">
+            <input type="submit" value="Update Name">
+        </form>
+
+        <br>
+        <p id="last_name">{{ user.last_name }}</p>
+        <button id="update_last_name_button" onclick="updateLastName()">Update Last Name</button>
+        <form id="update_last_name_form" hidden="hidden" method="POST" action="{% url 'update_last_name' %}">
+            {% csrf_token %}
+            <input type="text" name="last_name">
+            <input type="submit" value="Update Last Name">
+        </form>
+
+        <br>
+        <a class="btn btn-light" href="{% url 'change_password' %}" role="button">Change My Password</a>
+        <br>
+        <a class="btn btn-warning" href="{% url 'delete_user' %}" role="button">Delete My Account</a>
+        <br>
+        <a class="btn btn-warning" href="{% url 'logout' %}" role="button">Log Out</a>
+        <div align="center">
+            <h3>Order History:</h3>
+            <table class="table table-bordered table-light">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Title</th>
+                        <th scope="col">Size</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Purchase Date</th>
+                    </tr>
+                </thead>
+            {% for purchase in purchases %}
+                {% for product in products %}
+                    <tbody>
+                        <tr>
+                            <th scope="row"><a href="{% url 'product' product.id %}">{{ product.title }}</a></th>
+                            <td>{% for size in product.size.all %}
+                                {{ size }}
+                                {% endfor %}</td>
+                            <td>{{ product.price }}</td>
+                {% endfor %}
+                            <td>{{ purchase.purchase_date }}</td>
+                        </tr>
+                    </tbody>
+            {% endfor %}
+            </table>
+        </div>
+        <script>
+            function updateName() {
+            const form = document.getElementById('update_name_form');
+            form.hidden = !form.hidden;
+            }
+
+
+            function updateLastName()   {
+            const form = document.getElementById('update_last_name_form');
+            form.hidden = !form.hidden;
+            }
+        </script>
+    {% endif %}
+{% endblock %}

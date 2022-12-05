@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% load cart_tag %}
+
+ Total Length :<p id="cart_length">{{request.session.cart|length}} </p>
+<br>
+Cart Detail:
+<br>
+<br>{% for key,value in request.session.cart.items %}<hr>
+    Name: {{ value.title }}<br>
+    Price: {{ value.price }}<br>
+    Quantity: {{value.quantity}}<br>
+    <img src="{{ value.image }}" width="150" height="250">
+<br>
+
+    <hr>
+    {% endfor %}
+    <a href="{% url 'test' %}" hidden="hidden" onclick="checkLength()" id="test_button">Test payment</a>
+<br>
+    <a class="btn btn-dark" href="{% url 'cart_clear' %}">Clear Cart</a>
+<br>
+<script>
+    function checkLength()  {
+        if (len.textContent == 0)    {
+            return false;
+        }
+        return true;
+    }
+
+    window.onload = function()   {
+        if (checkLength())  {
+            button.hidden = "";
+            }
+        else    {
+            button.hidden = "hidden";
+    }}
+
+    const button = document.getElementById("test_button");
+    const len = document.getElementById("cart_length");
+</script>
+{% endblock %}

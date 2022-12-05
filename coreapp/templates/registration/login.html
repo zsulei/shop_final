@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div align="right" >
+    {% if message %}
+        <ul class="message">
+                {{ message }}
+        </ul>
+    {% endif %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-dark" type="submit">Login</button>
+    </form>
+
+
+    </div>
+{% endblock %}
