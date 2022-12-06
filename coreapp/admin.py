@@ -8,9 +8,9 @@ admin.site.register(Permission)
 
 @admin.register(Client)
 class ClientAdmin(admin.ModelAdmin):
-    list_display = ('username', 'last_name', 'first_name', )
+    list_display = ('username', 'last_name', 'first_name', 'is_staff', )
     search_fields = ('last_name__startswith', )
-    fields = ('username', 'last_name', 'first_name', 'avatar', 'activation_code', )
+    fields = ('username', 'last_name', 'first_name', 'avatar', 'activation_code', 'is_staff', )
 
 
 @admin.register(Product)

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+{% for product in products %}
+    <a href="{% url 'product' product.id %}">{{ product.title }}</a>
+    <br>
+{% endfor %}
+<div align="right">
+    <h3>Create Product Form:</h3>
+    <form method="POST" action="{% url 'admin_mode' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Create Product">
+    </form>
+<!--    <form method="POST" action="{% url 'create_product' %}">-->
+<!--        {% csrf_token %}-->
+<!--        <input type="text" name="title" value="Title">-->
+<!--        <br>-->
+<!--        <input type="text" name="color" value="Color">-->
+<!--        <br>-->
+<!--        <input type="file" name="image">Product Image-->
+<!--        <br>-->
+<!--        <input type="text" name="description" value="Description">-->
+<!--        <br>-->
+<!--        <input type="checkbox" name="is_popular" value="false">-->
+<!--        <br>-->
+<!--        <input type="text" name="price" value="Price">-->
+<!--        <br>-->
+<!--        <input type="text" name="category" value="Category">-->
+<!--        <br>-->
+<!--        <input type="text" name="product_type" value="Type">-->
+<!--        <br>-->
+<!--        <input type="text" name="material" value="Material">-->
+<!--        <br>-->
+<!--        <input type="text" name="size" value="Size">-->
+<!--        <br>-->
+<!--        <input type="text" name="manufacturer" value="Manufacturer">-->
+<!--        <br>-->
+<!--        <input class="btn btn-primary" type="submit" value="Create Product">-->
+<!--</form>-->
+</div>
+{% endblock %}

@@ -8,6 +8,7 @@ class Client(AbstractUser):
     avatar = models.ImageField(default='avatars/default.svg', upload_to='avatars/')
     first_name = models.CharField(max_length=50, blank=False, )
     last_name = models.CharField(max_length=50, )
+    is_staff = models.BooleanField(default=False, )
     activation_code = models.CharField(max_length=17, blank=True, null=True, )
     date_joined = models.DateTimeField(auto_now_add=True, )
 
@@ -25,8 +26,9 @@ class Client(AbstractUser):
 class Product(models.Model):
     title = models.CharField(max_length=100, )
     color = models.CharField(max_length=30, )
-    image = models.ImageField(upload_to='products', )
+    image = models.ImageField(upload_to='products', default='products/default.svg')
     description = models.TextField(null=True)
+    is_popular = models.BooleanField(default=False, )
     price = models.FloatField()
     category = models.ForeignKey('Categories', on_delete=models.SET_NULL, blank=True, null=True, )
     product_type = models.ForeignKey('Type', on_delete=models.SET_NULL, blank=True, null=True, )

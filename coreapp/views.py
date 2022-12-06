@@ -1,7 +1,8 @@
 from datetime import datetime
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
-from .forms import UserRegistrationForm, AvatarUpdateForm
+from django.core.files.storage import FileSystemStorage
+from .forms import UserRegistrationForm, AvatarUpdateForm, ProductImageForm
 from dateutil.tz import tzlocal
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -27,19 +28,85 @@ def register(request):
 
 def cabinet(request):
     return render(request, 'coreapp/cabinet.html', {
-        'user': Client.objects.get(id=request.user.id),
         'categories': Categories.objects.all(),
-        'products': Product.objects.all(),
-        'size': Size.objects.all(),
-        'purchases': AdminLog.objects.filter(client=request.user),
+        'admin_log': AdminLog.objects.filter(client=request.user)
+                  .order_by('-purchase_date'),
     })
+
+
+def admin_mode(request):
+    return render(request, 'coreapp/admin_mode.html', {
+        'products': Product.objects.all(),
+    })
+
+
+def is_popular(request):
+    if is_popular == 'on':
+        return True
+    else:
+        return False
+
+
+def addproducts(request):
+    if request.method == "POST":
+        form = ProductImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+        return redirect('home')
+    else:
+        form = ProductImageForm()
+    return render(request, 'coreapp/admin_mode.html', {'form': form})
+
+
+def create_product(request):
+    if request.method == 'POST':
+        image = request.FILES['image']
+        fs = FileSystemStorage()
+        filename = fs.save(image.name, image)
+        uploaded_file_url = fs.url(filename)
+        product = Product(
+            title=request.POST.get('title'),
+            color=request.POST.get('color'),
+            image=uploaded_file_url,
+            description=request.POST.get('description'),
+            price=request.POST.get('price'),
+            is_popular=is_popular(request.POST.get('is_popular'))
+        )
+        category_name = request.POST.get('category')
+        try:
+            category = Categories.objects.get(category=category_name)
+        except:
+            category = Categories(category=category_name)
+            category.save()
+        product.category = category
+        product_type = Type(
+            product_type=request.POST.get('product_type'))
+        product_type.save()
+        material = Material(
+            material=request.POST.get('material'))
+        material.save()
+        size = Size(
+            size=request.POST.get('size'))
+        size.save()
+        manufacturer = Manufacturer(
+            country=request.POST.get('manufacturer'))
+        manufacturer.save()
+        product.save()
+    else:
+        return redirect('admin_mode')
+    return redirect('admin_mode')
+
+
+def delete_product(request, productid):
+    product = Product.objects.get(id=productid)
+    product.delete()
+    return redirect('admin_mode')
 
 
 def change_password(request):
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
-            print('asd')
             user = form.save()
             update_session_auth_hash(request, user)  # Important!
             messages.success(request, 'Your password was successfully updated!')
@@ -95,8 +162,13 @@ def update_avatar(request):
 
 
 def home(request):
+    order_by = request.GET.get('order_by', None)
+    if order_by == 'highest':
+        products = Product.objects.order_by('-price')
+    else:
+        products = Product.objects.order_by('price')
     return render(request, 'coreapp/home.html', {
-        'products': Product.objects.all(),
+        'products': products,
         'categories': Categories.objects.all(),
     })
 
@@ -110,7 +182,6 @@ def product_detail(request, productid):
 
 
 def by_category(request, categoryid):
-    query = Categories.objects.filter(category=categoryid)
     return render(request, 'coreapp/category.html', {
         'products': Product.objects.filter(category=categoryid),
         'categories': Categories.objects.all(),

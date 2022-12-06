@@ -15,6 +15,10 @@
         <br><hr>
         JOINED DATE: {{ user.date_joined }}
         <br><hr>
+        {% if user.is_staff %}
+        <a href="{% url 'admin_mode' %}"><button>Admin Mode</button></a>
+        {% endif %}
+        <br><hr>
         <p id="name">{{ user.first_name }}</p>
         <button id="update_name_button" onclick="updateName()">Update First Name</button>
         <form id="update_name_form" hidden="hidden" method="POST" action="{% url 'update_first_name' %}">
