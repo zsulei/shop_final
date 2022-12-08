@@ -3,19 +3,39 @@
     {% if user.is_authenticated %}
         <h1>Hello,<a class="btn btn-light" href="{% url 'cabinet' %}" role="button">{{ user.first_name }} {{ user.last_name }}</a>
         </h1>
-        <br>
-
-        <a class="btn btn-light" href="{% url 'cart_detail' %}" role="button">Check Cart</a>
-        <br>
-            <h1>Test Products</h1>
-<div class="sortby">
-    <span>Sort By:
-            <a href="{% url 'home' %}?order_by=highest">Highest Price</a>
-            <a href="{% url 'home' %}?order_by=lowest">Lowest Price</a>
-    </span>
+<div align="center" id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
+  {% for item in is_popular %}
+    <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="{{ item.image.url }}" class="75" alt="...">
+    </div>
+        {% endfor %}
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
 </div>
+<br>
+<br>
+        <a class="btn btn-dark" href="{% url 'cart_detail' %}" role="button">Check Cart</a>
+        <br>
+        <div class="sortby">
+            <span>Sort By:
+                <a href="{% url 'home' %}?order_by=highest">Highest Price</a>
+                <a href="{% url 'home' %}?order_by=lowest">Lowest Price</a>
+            </span>
+        </div>
+<hr>
+    <div class="container">
+  <div class="row">
         {% for product in products %}
-            <img src="{{ product.imageURL|default:'/media/products/default.svg' }}
+            <div class="col-sm-4">
+            <img src="{{ product.image.url|default:'/media/products/default.svg' }}
 " width="100" height="200">
             <br>
             <h5>Name/Information: <a href="{% url 'product' product.id %}">{{ product.title }}</a></h5>
@@ -29,7 +49,10 @@
             <br>
             <a class="btn btn-secondary" href="{% url 'cart_add' product.id %}" role="button">Add To Cart</a>
             <hr>
+    </div>
         {% endfor %}
+    </div>
+        </div>
     {% else %}
         <div align="center">
             <h1> You should log in first</h1>

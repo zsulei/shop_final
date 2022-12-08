@@ -18,3 +18,7 @@ plt.legend(loc='lower center',fontsize=7, title='Лист четвертей')
 
 
 plt.show()
+
+
+
+datetime.now(tzlocal()).strftime("%Y-%m-%d %H:%M:%S")

@@ -6,8 +6,8 @@ from django.views.generic import TemplateView
 
 
 urlpatterns = [
+    path('by_name/', views.search_by_name, name='by_name'),
     path('product_delete/<int:productid>/', views.delete_product, name='product_delete'),
-    path('create_product/', views.create_product, name='create_product'),
     path('admin_mode/', views.addproducts, name='admin_mode'),
     path('upload_avatar/', views.update_avatar, name='upload_avatar'),
     path('avatar/', views.update_avatar, name='avatar'),

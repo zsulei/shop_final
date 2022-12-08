@@ -42,33 +42,42 @@
         <a class="btn btn-warning" href="{% url 'delete_user' %}" role="button">Delete My Account</a>
         <br>
         <a class="btn btn-warning" href="{% url 'logout' %}" role="button">Log Out</a>
-        <div align="center">
-            <h3>Order History:</h3>
-            <table class="table table-bordered table-light">
-                <thead class="thead-light">
-                    <tr>
-                        <th scope="col">Title</th>
-                        <th scope="col">Size</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Purchase Date</th>
-                    </tr>
-                </thead>
-            {% for purchase in purchases %}
-                {% for product in products %}
-                    <tbody>
-                        <tr>
-                            <th scope="row"><a href="{% url 'product' product.id %}">{{ product.title }}</a></th>
-                            <td>{% for size in product.size.all %}
-                                {{ size }}
-                                {% endfor %}</td>
-                            <td>{{ product.price }}</td>
-                {% endfor %}
-                            <td>{{ purchase.purchase_date }}</td>
-                        </tr>
-                    </tbody>
-            {% endfor %}
-            </table>
-        </div>
+<div align="center">
+    <h3>Order History:</h3>
+    <table class="table table-bordered table-light">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Size</th>
+                <th scope="col">Price</th>
+                <th scope="col">Purchase Date</th>
+            </tr>
+        </thead>
+    {% for record in admin_log %}
+        {% for purchase in record.purchase.all %}
+            <tbody>
+                <tr>
+                    <th scope="row">
+                        <a href="{% url 'product' purchase.product.id %}">
+                            {{ purchase.product.title }}
+                        </a>
+                    </th>
+                    <td>
+                        {% for size in purchase.product.size.all %}
+                            {{ size }}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {{ purchase.product.price }}
+                    </td>
+        {% endfor %}
+                    <td>{{ record.purchase_date }}</td>
+                </tr>
+            </tbody>
+    {% endfor %}
+    </table>
+</div>
+
         <script>
             function updateName() {
             const form = document.getElementById('update_name_form');

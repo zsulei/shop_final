@@ -3,7 +3,7 @@
 {% block content %}
 
     {% if user.is_authenticated %}
-        <img src="{{ product.image.url|default:'/media/products/default.svg' }}"
+        <img src="{{ product_detail.image.url|default:'/media/products/default.svg' }}"
              width="200" height="330" align="right" vspace="0" hspace="500">
         <h2>Name: {{ product_detail.title }}</h2>
         <h3>Category: {{ product_detail.category }}</h3>
