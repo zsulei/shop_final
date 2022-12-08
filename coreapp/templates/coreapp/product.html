@@ -14,9 +14,11 @@
                 {{ size }}
             {% endfor %}
         </h3>
-        <h3>Price: {{ product_detail.price }}</h3>
+        <h3>Price: {{ product_detail.price }} $</h3>
         <h3>Manufacturer: {{ product_detail.manufacturer }}</h3>
         <br>
+        <p>Description: {{ product_detail.description }}</p>
+
         {% if user.is_staff %}
             <a href="{% url 'product_delete' product_detail.id %}"><button>Delete Item</button></a>
         {% endif %}

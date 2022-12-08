@@ -84,7 +84,7 @@ class Purchase(models.Model):
     quantity = models.PositiveIntegerField()
 
     def __str__(self):
-        return f'self.product.title self.quantity'
+        return f'{self.product}-{self.quantity}'
 
 
 class AdminLog(models.Model):
